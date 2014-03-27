@@ -241,6 +241,12 @@ project(":flume") {
     }
 }
 
+project(":yarn") {
+    dependencies {
+        compile project(':core')
+    }
+}
+
 project(":examples/treasury_yield") {
     uploadArchives.onlyIf { false }
     dependencies {

@@ -1,2 +1,2 @@
-include 'core', 'hive', 'pig', 'streaming', 'flume', 'examples/treasury_yield', 'examples/enron', 
+include 'core', 'hive', 'pig', 'streaming', 'flume', 'yarn', 'examples/treasury_yield', 'examples/enron', 
         'examples/sensors', 'testing'
