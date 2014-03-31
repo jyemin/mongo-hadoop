@@ -6,7 +6,6 @@ ext.configDir = new File(rootDir, 'config')
 ext.hadoop_version = project.getProperties().get('hadoop_version', '2.3')
 ext.versionMap = [
         '0.23': '0.23.10',
-        '1.0' : '1.0.4',
         '1.1' : '1.1.2',
         'cdh4': '2.0.0-cdh4.6.0',
         '2.2' : '2.2.0',
@@ -18,7 +17,7 @@ ext.hadoopVersion = versionMap[hadoop_version]
 ext.hadoopBinaries = "${System.getProperty('user.home')}/hadoop-binaries"
 ext.hadoopHome = "${hadoopBinaries}/hadoop-${hadoopVersion}"
 
-println "Building against hadoop ${hadoop_version} using ${hadoopVersion} libraries"
+println "Building against hadoop ${hadoop_version} using ${hadoopVersion} libraries\n"
 
 buildscript {
     repositories {
@@ -245,6 +244,7 @@ project(":flume") {
 project(":yarn") {
     dependencies {
         compile project(':core')
+        testCompile "org.apache.hadoop:hadoop-yarn-server-tests:${hadoopVersion}"
     }
 }
 
