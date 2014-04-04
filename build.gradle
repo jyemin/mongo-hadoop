@@ -12,6 +12,7 @@ ext.versionMap = [
         '2.3' : '2.3.0'
 ].withDefault {
     throw new GradleException("Unknown hadoop version: ${hadoop_version}")
+    
 }
 ext.hadoopVersion = versionMap[hadoop_version]
 ext.hadoopBinaries = "${System.getProperty('user.home')}/hadoop-binaries"
@@ -244,7 +245,15 @@ project(":flume") {
 project(":yarn") {
     dependencies {
         compile project(':core')
-        testCompile "org.apache.hadoop:hadoop-yarn-server-tests:${hadoopVersion}"
+        mapReduceDeps(it, hadoopVersion)
+
+        compile "org.apache.hadoop:hadoop-common:${hadoopVersion}"
+        testCompile "org.apache.hadoop:hadoop-common:${hadoopVersion}:tests"
+
+        testCompile "org.apache.hadoop:hadoop-hdfs:${hadoopVersion}"
+        testCompile "org.apache.hadoop:hadoop-hdfs:${hadoopVersion}:tests"
+//        testCompile "org.apache.hadoop:hadoop-yarn-server-tests:${hadoopVersion}:tests"
+        testCompile 'com.jayway.awaitility:awaitility:1.5.0'        
     }
 }
 
@@ -392,9 +401,9 @@ def copyJars() {
 
 def mapReduceDeps(it, version) {
     ["core", "common", "shuffle", "app", "jobclient"].each { module ->
-        it.compile("org.apache.hadoop:hadoop-mapreduce-client-${module}:${version}") {
+        it.compile("org.apache.hadoop:hadoop-mapreduce-client-${module}:${version}") /*{
             exclude group: "org.apache.hadoop", module: "hadoop-hdfs"
-        }
+        }*/
     }
 }
 
