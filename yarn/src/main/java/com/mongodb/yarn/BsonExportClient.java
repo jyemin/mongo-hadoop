@@ -90,6 +90,7 @@ public class BsonExportClient {
         String jar = JarFinder.getJar(YarnApp.class);
         addToLocalResources(fs, jar, new File(jar).getName(), appId.getId(), localResources, null);
 
+        amContainer.setLocalResources(localResources);
         StringBuilder classPathEnv = new StringBuilder(Environment.CLASSPATH.$())
                                          .append(File.pathSeparatorChar).append("./*");
         for (String c : conf.getStrings(YarnConfiguration.YARN_APPLICATION_CLASSPATH,
