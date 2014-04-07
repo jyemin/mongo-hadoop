@@ -246,14 +246,15 @@ project(":yarn") {
     dependencies {
         compile project(':core')
         mapReduceDeps(it, hadoopVersion)
+        compile 'com.jayway.awaitility:awaitility:1.5.0'
 
         compile "org.apache.hadoop:hadoop-common:${hadoopVersion}"
         testCompile "org.apache.hadoop:hadoop-common:${hadoopVersion}:tests"
 
         testCompile "org.apache.hadoop:hadoop-hdfs:${hadoopVersion}"
-        testCompile "org.apache.hadoop:hadoop-hdfs:${hadoopVersion}:tests"
-//        testCompile "org.apache.hadoop:hadoop-yarn-server-tests:${hadoopVersion}:tests"
-        testCompile 'com.jayway.awaitility:awaitility:1.5.0'        
+        compile "org.apache.hadoop:hadoop-hdfs:${hadoopVersion}:tests"
+
+        testCompile "org.apache.hadoop:hadoop-yarn-server-tests:${hadoopVersion}:tests"
     }
 }
 

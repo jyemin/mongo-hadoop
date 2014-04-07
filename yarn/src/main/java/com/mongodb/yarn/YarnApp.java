@@ -20,6 +20,8 @@ import java.io.IOException;
 public class YarnApp {
     private static final Log LOG = LogFactory.getLog(YarnApp.class);
     private static final String BASE_PATH = System.getProperty("mongo.export.path", "/mongodb/");
+    final static String JAR = JarFinder.getJar(YarnApp.class);
+
     private boolean wasRun = false;
     FileSystem fileSystem;
     private final MongoClientURI uri;
@@ -30,6 +32,7 @@ public class YarnApp {
         conf.addResource("hdfs-site.xml");
         fileSystem = FileSystem.get(conf);
         uri = new MongoClientURI(System.getProperty(MongoConfigUtil.INPUT_URI));
+        
     }
 
     public void run() throws IOException {
