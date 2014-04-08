@@ -81,16 +81,6 @@ public class TestYarnApp {
     }
 
     @Test
-    public void connect() throws IOException {
-        //        YarnClient yarnClient = YarnClient.createYarnClient();
-        //        yarnClient.init(yarnCluster.getConfig());
-        //        yarnClient.start();
-
-        System.setProperty(MongoConfigUtil.INPUT_URI, "mongodb://localhost:27017/mongo_hadoop.messages");
-        new YarnApp().run();
-    }
-
-    @Test
     public void deployYarnApp() {
         Configuration conf = getConfiguration();
         YarnRPC rpc = YarnRPC.create(conf);
