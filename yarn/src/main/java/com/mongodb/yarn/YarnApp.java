@@ -94,6 +94,7 @@ public class YarnApp {
 
         String query = System.getProperty(MongoConfigUtil.INPUT_QUERY);
         DBCursor cursor = query == null ? dbCollection.find() : dbCollection.find((DBObject) JSON.parse(query));
+        cursor.snapshot();
         DefaultDBEncoder encoder = new DefaultDBEncoder();
 
         Path path = new Path(BASE_PATH + "/" + collection);
