@@ -89,24 +89,24 @@ public class YarnApp {
         amrmClient.start();
         amrmClient.registerApplicationMaster(applicationName, -1, null);
 
-                MongoClient client = mongoUri != null ? new MongoClient(mongoUri) : new MongoClient(host, port);
-                DBCollection dbCollection = client.getDB(database).getCollection(collection);
-        
-                String query = System.getProperty(MongoConfigUtil.INPUT_QUERY);
-                DBCursor cursor = query == null ? dbCollection.find() : dbCollection.find((DBObject) JSON.parse(query));
-                DefaultDBEncoder encoder = new DefaultDBEncoder();
-        
-                Path path = new Path(BASE_PATH + "/" + collection);
-                LOG.info("***************** path = " + path);
-                fileSystem.delete(path, true);
-                FSDataOutputStream out = fileSystem.create(path);
-        
-                while (cursor.hasNext()) {
-                    out.write(encoder.encode(cursor.next()));
-                }
-        
-                out.close();
-//                finish();
+        MongoClient client = mongoUri != null ? new MongoClient(mongoUri) : new MongoClient(host, port);
+        DBCollection dbCollection = client.getDB(database).getCollection(collection);
+
+        String query = System.getProperty(MongoConfigUtil.INPUT_QUERY);
+        DBCursor cursor = query == null ? dbCollection.find() : dbCollection.find((DBObject) JSON.parse(query));
+        DefaultDBEncoder encoder = new DefaultDBEncoder();
+
+        Path path = new Path(BASE_PATH + "/" + collection);
+        LOG.info("***************** path = " + path);
+        fileSystem.delete(path, true);
+        FSDataOutputStream out = fileSystem.create(path);
+
+        while (cursor.hasNext()) {
+            out.write(encoder.encode(cursor.next()));
+        }
+
+        out.close();
+        //                finish();
         amrmClient.unregisterApplicationMaster(FinalApplicationStatus.SUCCEEDED, null, null);
         amrmClient.stop();
     }
