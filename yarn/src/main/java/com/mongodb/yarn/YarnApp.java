@@ -5,7 +5,8 @@ import com.beust.jcommander.Parameter;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.DefaultDBEncoder;
+import com.mongodb.LazyDBDecoder;
+import com.mongodb.LazyDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.hadoop.util.MongoConfigUtil;
@@ -91,11 +92,12 @@ public class YarnApp {
 
         MongoClient client = mongoUri != null ? new MongoClient(mongoUri) : new MongoClient(host, port);
         DBCollection dbCollection = client.getDB(database).getCollection(collection);
+        dbCollection.setDBDecoderFactory(LazyDBDecoder.FACTORY);
 
         String query = System.getProperty(MongoConfigUtil.INPUT_QUERY);
+
         DBCursor cursor = query == null ? dbCollection.find() : dbCollection.find((DBObject) JSON.parse(query));
         cursor.snapshot();
-        DefaultDBEncoder encoder = new DefaultDBEncoder();
 
         Path path = new Path(BASE_PATH + "/" + collection);
         LOG.info("***************** path = " + path);
@@ -103,7 +105,8 @@ public class YarnApp {
         FSDataOutputStream out = fileSystem.create(path);
 
         while (cursor.hasNext()) {
-            out.write(encoder.encode(cursor.next()));
+            LazyDBObject next = (LazyDBObject) cursor.next();
+            next.pipe(out);
         }
 
         out.close();
